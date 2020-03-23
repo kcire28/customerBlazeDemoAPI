@@ -1,4 +1,7 @@
 logging:
   level: INFO
-  loggers:
-    com.customerdemo: DEBUG
+  
+mongoHost : localhost
+mongoPort : 27017
+mongoDB : dropwizard
+collectionName: customers

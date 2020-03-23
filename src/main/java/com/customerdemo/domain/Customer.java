@@ -1,47 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.customerdemo.api;
+package com.customerdemo.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.bson.types.ObjectId;
-
-/**
- *
- * @author Erick
- */
 public class Customer {
-   
-    @JsonProperty
-    private ObjectId id;
-    
-    @JsonProperty
-    private String firstName; 
 
-    @JsonProperty
+    private String firstName;
     private String lastName;
-
-    @JsonProperty
     private String email;
-
-    @JsonProperty
     private String phoneNumber;
-
+    
     public Customer() {
     }
 
-    public Customer(ObjectId id, String firstName, String lastName, String email, String phoneNumber) {
-        this.id = id;
+    public Customer(String firstName, String lastName, String email, String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
-    }
-
-    public ObjectId getId() {
-        return id;
     }
 
     public String getFirstName() {
@@ -60,10 +33,6 @@ public class Customer {
         return phoneNumber;
     }
 
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -78,5 +47,15 @@ public class Customer {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email=" + email +
+                '}';
     }
 }

@@ -1,33 +1,43 @@
 package com.customerdemo;
 
-import com.customerdemo.resources.CustomerResource;
+import com.customerdemo.resource.CustomerServiceHealthCheckResource;
+import com.customerdemo.resource.CustomerResource;
+import com.customerdemo.service.MongoService;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class CustomerServiceApplication extends Application<CustomerServiceConfiguration> {
 
-    public static void main(final String[] args) throws Exception {
+    private static final Logger logger = LoggerFactory.getLogger(CustomerServiceApplication.class);
+
+    public static void main(String[] args) throws Exception {
         new CustomerServiceApplication().run(args);
     }
 
     @Override
-    public String getName() {
-        return "CustomerService";
+    public void initialize(Bootstrap<CustomerServiceConfiguration> b) {
     }
 
     @Override
-    public void initialize(final Bootstrap<CustomerServiceConfiguration> bootstrap) {
-        // TODO: application initialization
-    }
-
-    @Override
-    public void run(final CustomerServiceConfiguration configuration,
-                    final Environment environment) {
+    public void run(CustomerServiceConfiguration config, Environment env)
+            throws Exception {
+        MongoClient mongoClient = new MongoClient(config.getMongoHost(), config.getMongoPort());
+        MongoManaged mongoManaged = new MongoManaged(mongoClient);
+        env.lifecycle().manage(mongoManaged);
+        MongoDatabase db = mongoClient.getDatabase(config.getMongoDB());
+        MongoCollection<Document> collection = db.getCollection(config.getCollectionName());
         
-        //Resources
-        CustomerResource customerResource = new CustomerResource();
-        environment.jersey().register(customerResource);
+        // REGISTER APIS 
+        env.jersey().register(new CustomerResource(collection, new MongoService()));
+        env.healthChecks().register("CustomerServiceHealthCheck",
+                new CustomerServiceHealthCheckResource(mongoClient));
     }
-
 }
