@@ -1,5 +1,6 @@
 package com.customerdemo;
 
+import com.customerdemo.resources.CustomerResource;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -23,7 +24,10 @@ public class CustomerServiceApplication extends Application<CustomerServiceConfi
     @Override
     public void run(final CustomerServiceConfiguration configuration,
                     final Environment environment) {
-        // TODO: implement application
+        
+        //Resources
+        CustomerResource customerResource = new CustomerResource();
+        environment.jersey().register(customerResource);
     }
 
 }

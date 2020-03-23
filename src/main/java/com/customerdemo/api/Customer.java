@@ -6,6 +6,7 @@
 package com.customerdemo.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -14,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Customer {
    
     @JsonProperty
-    private int id;
+    private ObjectId id;
     
     @JsonProperty
     private String firstName; 
@@ -31,7 +32,7 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(int id, String firstName, String lastName, String email, String phoneNumber) {
+    public Customer(ObjectId id, String firstName, String lastName, String email, String phoneNumber) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -39,7 +40,7 @@ public class Customer {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getId() {
+    public ObjectId getId() {
         return id;
     }
 
@@ -58,7 +59,24 @@ public class Customer {
     public String getPhoneNumber() {
         return phoneNumber;
     }
-    
-    
-    
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
