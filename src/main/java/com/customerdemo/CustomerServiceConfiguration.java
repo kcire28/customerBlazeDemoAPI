@@ -15,6 +15,14 @@ public class CustomerServiceConfiguration extends Configuration {
     @JsonProperty
     @NotEmpty
     public String mongoHost;
+    
+    @JsonProperty
+    @NotEmpty
+    public String mongoUserName;
+        
+    @JsonProperty
+    @NotEmpty
+    public String mongoPassword;
 
     @JsonProperty
     @Min(1)
@@ -60,4 +68,21 @@ public class CustomerServiceConfiguration extends Configuration {
     public void setCollectionName(String collectionName) {
         this.collectionName = collectionName;
     }
+
+    public String getMongoUserName() {
+        return mongoUserName;
+    }
+
+    public String getMongoPassword() {
+        return mongoPassword;
+    }
+
+    public void setMongoUserName(String mongoUserName) {
+        this.mongoUserName = mongoUserName;
+    }
+
+    public void setMongoPassword(String mongoPassword) {
+        this.mongoPassword = mongoPassword;
+    }
+    
 }

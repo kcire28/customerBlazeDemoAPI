@@ -1,7 +1,13 @@
 package com.customerdemo.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.bson.types.ObjectId;
+
 public class Customer {
 
+    @JsonSerialize(using=ObjectIdJsonSerializer.class)
+    private ObjectId id;
+    
     private String firstName;
     private String lastName;
     private String email;
@@ -10,11 +16,21 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String firstName, String lastName, String email, String phoneNumber) {
+    public Customer(ObjectId id, String firstName, String lastName, String email, String phoneNumber) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+    }
+
+    
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     public String getFirstName() {

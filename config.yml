@@ -4,4 +4,6 @@ logging:
 mongoHost : localhost
 mongoPort : 27017
 mongoDB : dropwizard
+mongoUserName: "mongoadmin" 
+mongoPassword: "mongoadmin"
 collectionName: customers

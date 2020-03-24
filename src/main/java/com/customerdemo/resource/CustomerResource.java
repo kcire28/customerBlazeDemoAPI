@@ -6,6 +6,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.wordnik.swagger.annotations.Api;
 import org.bson.Document;
 
@@ -41,59 +42,33 @@ public class CustomerResource {
         Gson gson = new Gson();
         String json = gson.toJson(customer);
 
-        mongoService.insertOne(collection, new Document(BasicDBObject.parse(json)));
+        mongoService.insertCustomer(collection, new Document(BasicDBObject.parse(json)));
         Map<String, String> response = new HashMap<>();
         response.put("message", "Customer created successfully");
-        return Response.ok(response).build();
-    }
-
-    @POST
-    @Timed
-    @Path("/createCustomers")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response createCustomers(@NotNull final List<Customer> customers) {
-        List<Document> customerDocuments = new ArrayList<>();
-        Gson gson = new Gson();
-        String json;
-        for (Customer customer : customers) {
-            json = gson.toJson(customer);
-            customerDocuments.add(new Document(BasicDBObject.parse(json)));
-        }
-        mongoService.insertMany(collection, customerDocuments);
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Customers created successfully");
         return Response.ok(response).build();
     }
 
     @GET
     @Timed
     public Response getCustomers() {
-        List<Document> documents = mongoService.find(collection);
+        
+        List<Customer> documents = mongoService.find(collection);
         return Response.ok(documents).build();
     }
-
+        
     @GET
     @Timed
-    @Path("{name}")
-    public Response getCustomer(@PathParam("name") final String name) {
-        List<Document> documents = mongoService.findByKey(collection, "name", name);
-        return Response.ok(documents).build();
-    }
-
-    @GET
-    @Timed
-    @Path("/salary/sort")
-    public Response getCustomer() {
-        List<Document> documents = mongoService.findByCriteria(collection, "salary",
-                25000, 1000, 1);
-        return Response.ok(documents).build();
+    @Path("{id}")
+    public Response getCustomer(@PathParam("id") final String id) {
+        Customer customer = mongoService.findById(collection, id);
+        return Response.ok(customer).build();
     }
 
     @PUT
     @Timed
-    public Response editCustomer(@NotNull @Valid final Customer customer) {
-        mongoService.updateOneCustomer(collection, "name", "department", "salary", customer);
+    @Path("{id}")
+    public Response editCustomer(@PathParam("id") final String id, @NotNull @Valid final Customer customer) {
+        mongoService.updateCustomer(collection, id, customer);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Customer with Name: " + customer.getFirstName()+ " updated successfully");
         return Response.ok(response).build();
@@ -101,11 +76,11 @@ public class CustomerResource {
 
     @DELETE
     @Timed
-    @Path("{name}")
-    public Response deleteCustomer(@PathParam("name") final String name) {
-        mongoService.deleteOne(collection, "name", name);
+    @Path("{id}")
+    public Response deleteCustomer(@PathParam("id") final String id) {
+        mongoService.deleteOne(collection, id);
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Customer with Name: " + name + " deleted successfully");
+        response.put("message", "Customer with ID: " + id + " was deleted successfully");
         return Response.ok(response).build();
     }
 }
